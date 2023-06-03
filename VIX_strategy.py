@@ -132,10 +132,10 @@ def create_df(moving_avg_len=9 ,
       if(E_mini['Signal'][i] != E_mini['Signal'][i-1]):
         if(E_mini['Signal'][i] == -1 and (E_mini['Signal'][i-1]!=0)):
           exit_price = E_mini['Close'][i]
-          E_mini['P/L'][i] = exit_price - entry_price
+          E_mini['P/L'][i] = exit_price - entry_price - (3 / 50)
         if(E_mini['Signal'][i] == 1 and (E_mini['Signal'][i-1]!=0)):
           exit_price = E_mini['Close'][i]
-          E_mini['P/L'][i] = -1*(exit_price - entry_price)
+          E_mini['P/L'][i] = -1*(exit_price - entry_price) - (3 / 50)
         entry_price = E_mini['Close'][i]
 
     E_mini['P/L'].mean()
