@@ -17,14 +17,16 @@ class Backtest:
     def backtest(self):
         global prev_state
         data = self.data
-        total_gain = data[-1]['Capital']
-        investing_value = data[0]['Capital']
+        # print(data)
+        # print(data.iloc[-1])
+        total_gain = data.iloc[-1]['Capital']
+        investing_value = data.iloc[0]['Capital']
         # investing_value = 50000
         total_return = total_gain / investing_value
         std = data['Close'].std()
         Rf = 5
         sharpe_ratio = (total_return - Rf) / std
-        return sharpe_ratio, total_return
+        return sharpe_ratio, total_return, total_gain
 
 
 
