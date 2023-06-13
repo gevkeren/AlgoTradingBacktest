@@ -23,10 +23,8 @@ class Backtest:
         investing_value = data.iloc[0]['Capital']
         # investing_value = 50000
         total_return = total_gain / investing_value
-        std = data['Close'].std()
-        Rf = 0.05
-        sharpe_ratio = (total_return - Rf) / std
-        return sharpe_ratio, total_return, total_gain
+
+        return total_return, total_gain
 
 
 

@@ -33,10 +33,10 @@ def main():
     # We optimized each parameter separately to narrow down our final optimization domain
     # These are the values we want to optimize:
     best_moving_average_length = [8,9]
-    best_buy_triggers = [1.13, 1.14, 1.12, 1.15]
-    best_sell_triggers = [0.92, 0.85, 0.86, 0.83]
-    best_ratioLB = [8, 9, 10]
-    best_moving_average_ratio = [3,4,5]
+    best_buy_triggers = [1.10, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16]
+    best_sell_triggers = [0.83, 0.84, 0.85, 0.86, 0.87, 0.88, 0.89, 0.90, 0.91, 0.92]
+    best_ratioLB = [8, 9]
+    best_moving_average_ratio = [4]
 
     # Initializing to lists that will contain all sharpe ratios and all total_gains
     # We will sort these lists at the end
@@ -49,13 +49,12 @@ def main():
                 for ratioLB in best_ratioLB:
                     for moving_average_ratio in best_moving_average_ratio:
                         values = (moving_average_length, buy_trigger, sell_trigger, ratioLB, moving_average_ratio)
-                        data = create_df(moving_average_length, buy_trigger, sell_trigger, ratioLB, moving_average_ratio, 3)
+                        data, sharpe = create_df(moving_average_length, buy_trigger, sell_trigger, ratioLB, moving_average_ratio, 3)
                         # Draw Down calculation
                         draw_down = max_draw_down_calc(data)
                         b = Backtest(data, commission=3)
-                        sharpe, return_value, gain = b.backtest()
-                        # print(f"The Current Sharpe is: {sharpe}")
-                        # print(f"The Current return is: {return_value}")
+                        return_value, gain = b.backtest()
+
                         print(f"For values of {moving_average_length} - {buy_trigger} - {sell_trigger} - {ratioLB} - {moving_average_ratio}")
                         print(f"The Current gain is: {gain}")
                         print(f"The Current sharpe is: {sharpe}")
