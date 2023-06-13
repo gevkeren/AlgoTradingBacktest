@@ -73,7 +73,7 @@ def main():
     print(f"Best Gains  : {best_gains}")
     print(f"Best Sharpes: {best_sharpes}")
     print("Best Values:")
-    for value in best_values:
+    for value in best_sharpes:
         print(value)
     return 0
 # Best Values:
