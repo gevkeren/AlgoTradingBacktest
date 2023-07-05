@@ -13,7 +13,6 @@ class Backtest:
     def __repr__(self):
         return "<Backtest " + str(self) + ">"
 
-
     def backtest(self):
         global prev_state
         data = self.data

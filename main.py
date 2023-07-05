@@ -5,6 +5,8 @@ from backtest import Backtest
 # from summary import Summary, plot_data
 from VIX_strategy import create_df
 from utils import adjust_types
+
+
 # ITVS - ממנו גוזרים כניסות ויציאות לטרייד
 # ITVS - (VIX / VIX3M).mean().rolling(length_moving_average)
 
@@ -28,11 +30,12 @@ def max_draw_down_calc(df):
                 jVal = j
     return maxDD
 
+
 def main():
     # data = create_df(9, 1.15, 0.85, 8, 4)
     # We optimized each parameter separately to narrow down our final optimization domain
     # These are the values we want to optimize:
-    best_moving_average_length = [8,9]
+    best_moving_average_length = [8, 9]
     best_buy_triggers = [1.10, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16]
     best_sell_triggers = [0.83, 0.84, 0.85, 0.86, 0.87, 0.88, 0.89, 0.90, 0.91, 0.92]
     best_ratioLB = [8, 9]
@@ -44,18 +47,20 @@ def main():
     best_gains = []
     best_values = []
     for moving_average_length in best_moving_average_length:
-        for buy_trigger in best_buy_triggers: # Buy Trigger
-            for sell_trigger in best_sell_triggers: # Sell Trigger
+        for buy_trigger in best_buy_triggers:  # Buy Trigger
+            for sell_trigger in best_sell_triggers:  # Sell Trigger
                 for ratioLB in best_ratioLB:
                     for moving_average_ratio in best_moving_average_ratio:
                         values = (moving_average_length, buy_trigger, sell_trigger, ratioLB, moving_average_ratio)
-                        data, sharpe = create_df(moving_average_length, buy_trigger, sell_trigger, ratioLB, moving_average_ratio, 3)
+                        data, sharpe = create_df(moving_average_length, buy_trigger, sell_trigger, ratioLB,
+                                                 moving_average_ratio, 3)
                         # Draw Down calculation
                         draw_down = max_draw_down_calc(data)
                         b = Backtest(data, commission=3)
                         return_value, gain = b.backtest()
 
-                        print(f"For values of {moving_average_length} - {buy_trigger} - {sell_trigger} - {ratioLB} - {moving_average_ratio}")
+                        print(
+                            f"For values of {moving_average_length} - {buy_trigger} - {sell_trigger} - {ratioLB} - {moving_average_ratio}")
                         print(f"The Current gain is: {gain}")
                         print(f"The Current sharpe is: {sharpe}")
                         print("------------------------------------")
@@ -76,6 +81,8 @@ def main():
     for value in best_sharpes:
         print(value)
     return 0
+
+
 # Best Values:
 # (8, 1.13, 0.92, 9, 4) - 397621
 # (8, 1.13, 0.85, 9, 4) - 396701
@@ -89,4 +96,3 @@ def main():
 # (8, 1.14, 0.85, 9, 4) - 386076
 if __name__ == '__main__':
     main()
-

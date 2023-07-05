@@ -27,31 +27,34 @@ def create_df(moving_avg_len=9 ,
         moving_avg_ratio=4,
         Buy_ratio=0.95,
         Sell_ratio=1):
+
     ES = yf.Ticker('^GSPC')
 
-    ES_df = pd.DataFrame(ES.history(start='2007-01-01', interval="1d", auto_adjust=False))
+    ES_df = pd.DataFrame(ES.history(start='2007-01-01', end='2018-01-01', interval="1d", auto_adjust=False))
     ES_df = ES_df.reset_index()
     ES_df['Date'] = pd.to_datetime(ES_df['Date'], unit='s')
 
     VIX = yf.Ticker('^VIX')
 
-    VIX_df = pd.DataFrame(VIX.history(start='2007-01-01', interval="1d", auto_adjust=False))
+    VIX_df = pd.DataFrame(VIX.history(start='2007-01-01', end='2018-01-01', interval="1d", auto_adjust=False))
     VIX_df = VIX_df.reset_index()
     VIX_df['Date'] = pd.to_datetime(VIX_df['Date'], unit='s')
 
     # data 3
     VIX3M = yf.Ticker('^VIX3M')
 
-    VIX3M = pd.DataFrame(VIX3M.history(start='2007-01-01', interval="1d", auto_adjust=False))
+    VIX3M = pd.DataFrame(VIX3M.history(start='2007-01-01', end='2018-01-01', interval="1d", auto_adjust=False))
     VIX3M = VIX3M.reset_index()
     VIX3M['Date'] = pd.to_datetime(VIX3M['Date'], unit='s')
 
     # data 4
     E_mini = yf.Ticker('ES=F')
 
-    E_mini = pd.DataFrame(E_mini.history(start='2007-01-01', interval="1d", auto_adjust=False))
+    E_mini = pd.DataFrame(E_mini.history(start='2007-01-01', end='2018-01-01', interval="1d", auto_adjust=False))
     E_mini = E_mini.reset_index()
     E_mini['Date'] = pd.to_datetime(E_mini['Date'], unit='s')
+
+
 
     # drop manualy all values that in E_mini and not in US_bond
     E_mini = E_mini.drop(192)
@@ -66,14 +69,14 @@ def create_df(moving_avg_len=9 ,
     E_mini = E_mini.drop(2506)
     E_mini = E_mini.set_index('Date')
     E_mini = E_mini.reset_index()
-    E_mini = E_mini.drop(3888)
-    E_mini = E_mini.set_index('Date')
-    E_mini = E_mini.reset_index()
+    # E_mini = E_mini.drop(3888)
+    # E_mini = E_mini.set_index('Date')
+    # E_mini = E_mini.reset_index()
 
     # data 5
     US_tres = yf.Ticker('ZB=F')
 
-    US_tres = pd.DataFrame(US_tres.history(start='2007-01-01', interval="1d", auto_adjust=False))
+    US_tres = pd.DataFrame(US_tres.history(start='2007-01-01', end='2018-01-01', interval="1d", auto_adjust=False))
     US_tres = US_tres.reset_index()
     US_tres['Date'] = pd.to_datetime(US_tres['Date'], unit='s')
     US_tres = US_tres.drop(0)
@@ -92,11 +95,10 @@ def create_df(moving_avg_len=9 ,
     ratio = pd.Series(ratio)  # convert ratio array to a pandas Series
     ITVS = ratio.rolling(window=moving_avg_len).mean()
 
-    BondRatio = abs((US_tres['Close'] - US_tres['Close'].shift(-RatioLB)) / US_tres['Close'])
+    BondRatio = abs((US_tres['Close'] - US_tres['Close'].shift(+RatioLB)) / US_tres['Close'])
     US_tres['Close'].shift(1)
 
-    ESRatio = abs((E_mini['Close'] - E_mini['Close'].shift(-RatioLB)) / E_mini['Close'])
-
+    ESRatio = abs((E_mini['Close'] - E_mini['Close'].shift(+RatioLB)) / E_mini['Close'])
 
     RR = BondRatio/ESRatio
 
